@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>homework</title>
+<style>
+#img1 {
+	display: none
+}
+
+.char {
+	width: 100px;
+	float: left;
+	text-align: right;
+	padding-right: 15px;
+	letter-spacing: 3px;
+}
+
+.bs {
+	width: 500px;
+	height: 10%;
+	border-bottom: 1px dotted #FCFCFC;
+	margin: 5px 5px 1px 5px;
+	padding-bottom: 2px;
+}
+</style>
+
+</head>
+<body>
+	<fieldset
+		style="height: 200px; border: 1px outset #FFCCCC; width: 500px;">
+		<legend>會員註冊</legend>
+		<div class="bs">
+			<label class="char">姓名:</label><input type="text" id="idname"
+				size="15" placeholder="請輸入姓名" /><a id="check" href="#">帳號檢查</a> <img
+				src="images/ajax-loader.gif" id="img1">
+		</div>
+		<div id="div1" class="bs"></div>
+		<div class="bs">
+			<label class="char">密碼:</label><input type="password" id="idPwd"
+				size="15" placeholder="請輸入密碼" />
+		</div>
+		<div class="bs"></div>
+		<div class="bs">
+			<label class="char">電子郵件:</label><input type="text" id="idemail"
+				size="15" />
+		</div>
+		<div class="bs"></div>
+		<div>
+			<input type="button" value="註冊" />
+		</div>
+
+	</fieldset>
+
+
+	<script>
+		var btn = document.getElementById("check");
+		btn.addEventListener("click", load);
+		var xhr = null;
+
+		function load() {
+			xhr = new XMLHttpRequest();
+
+			if (xhr != null) {
+				xhr.addEventListener("readystatechange", callback);
+				xhr.open("post", "AccountCheck.jsp", true);
+				xhr.setRequestHeader("Content-Type",
+						"application/x-www-form-urlencoded")
+				var temp = document.getElementById("idname").value;
+				xhr.send("name=" + temp);
+			} else {
+				alert("您的瀏覽器不支援");
+			}
+		}
+
+		function callback() {
+			console.log("readyState" + xhr.readyState);
+			if (xhr.readyState == 1) {
+				document.getElementById("img1").style.display = "inline";
+			}
+			if (xhr.readyState == 4) {
+				document.getElementById("img1").style.display = "none";
+				if (xhr.status == 200) {
+					document.getElementById("div1").innerHTML = xhr.responseText;
+				} else {
+					alert(xhr.status + ":" + xhr.statusText);
+				}
+			}
+		}
+	</script>
+
+
+</body>
+</html>

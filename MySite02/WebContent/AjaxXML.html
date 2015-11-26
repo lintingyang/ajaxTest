@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/justified-nav.css">
+</head>
+<body>
+	<div class="container">
+		<div class="masthead">
+			<h3 class="text-muted">EEIT</h3>
+			<nav>
+				<ul class="nav nav-justified">
+					<li class="active"><a href="Template.html">Template</a></li>
+					<li><a href="TableStyle.html">Table</a></li>
+					<li><a href="FormStyle.html">Form</a></li>
+					<li><a href="AutoComplete.html">AutoComplete</a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="#">Contact</a></li>
+				</ul>
+			</nav>
+		</div>
+
+		<!-- Jumbotron -->
+		<div class="jumbotron">
+			<div class="page-header">
+				<h3>
+					Ajax同步處理 <small>Ajax</small>
+				</h3>
+			</div>
+			<!-- 每頁不同的內容從這裡開始 -->
+           <button id="button1" class="btn btn-primary btn-xs">
+           load
+           <span class="glyphicon glyphicon-apple"></span>
+           </button>
+           <div id="div1"></div>
+
+
+			<!-- 每頁不同的內容到這裡結束 -->
+		</div>
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2>HTML5</h2>
+				<p>HTML5是HTML最新的修訂版本，2014年10月由全球資訊網協會（W3C）完成標準制定。[2][3][4]目標是取代1999年所製定的HTML
+					4.01和XHTML 1.0標準，以期能在網際網路應用迅速發展的時候，使網路標準達到符合當代的網路需求。</p>
+				<p>
+					<a class="btn btn-primary"
+						href="https://zh.wikipedia.org/wiki/HTML5" role="button">詳細資料
+						&raquo;</a>
+				</p>
+			</div>
+			<div class="col-md-4">
+				<h2>CSS3</h2>
+				<p>階層式樣式表，一種用來為結構化文件（如HTML文件或XML應用）添加樣式（字型、間距和顏色等）的電腦語言，由W3C定義和維護。目前最新版本是CSS2.1，為W3C的推薦標準。CSS3現在已被大部分現代瀏覽器支援，而下一版的CSS4仍在開發過程中。</p>
+				<p>
+					<a class="btn btn-primary"
+						href="https://zh.wikipedia.org/wiki/%E5%B1%82%E5%8F%A0%E6%A0%B7%E5%BC%8F%E8%A1%A8#CSS3"
+						role="button">詳細資料 &raquo;</a>
+				</p>
+			</div>
+			<div class="col-md-4">
+				<h2>JavaScript</h2>
+				<p>JavaScript，直譯式程式語言，是一種動態型別、基於原型的語言，內建支援類別。它的直譯器被稱為JavaScript引擎，為瀏覽器的一部分，廣泛用於用戶端的腳本語言，最早是在HTML網頁上使用，用來給HTML網頁增加動態功能。現在JavaScript也可被用於網路伺服器，如Node.js。</p>
+				<p>
+					<a class="btn btn-primary"
+						href="https://zh.wikipedia.org/wiki/JavaScript" role="button">詳細資料
+						&raquo;</a>
+				</p>
+			</div>
+		</div>
+
+		<!-- Site footer -->
+		<footer class="footer">
+			<p>&copy; EEIT 2015</p>
+		</footer>
+
+	</div>
+	<!-- /container -->
+	<script>
+	var btn = document.getElementById("button1");
+	btn.addEventListener("click", load);
+	var xhr = null;
+	
+	function load(){
+	xhr = new XMLHttpRequest();
+	
+	if(xhr!=null){	
+	xhr.addEventListener("readystatechange",callback);
+	xhr.open("get","travel.xml",true);
+	xhr.send();
+	}else{
+		alert("您的瀏覽器不支援");	
+		}
+	}
+
+	function callback(){
+		if(xhr.readyState == 4){
+			if(xhr.status == 200){
+				var doc = xhr.responseXML;
+				var temp = document.getElementById("div1");
+				var sections = doc.getElementsByTagName("Section");
+// 				var titles = doc.getElementsByTagName("stitle");
+// 				var bodys = doc.getElementsByTagName("xbody");
+				while(temp.hasChildNodes()){
+					temp.removeChild(temp.lastChild);
+				}
+
+
+				for(var i = 0 , max = sections.length ; i < max ; i++ ){
+// 					console.log(sections[i].getElementsByTagName("stitle")[0].firstChild.nodeValue);
+// 					console.log(sections[i].getElementsByTagName("xbody")[0].firstChild.nodeValue);
+// 					var files = sections[i].getElementsByTagName("file")[0];
+// 					console.log(files.childNodes[0].firstChild.nodeValue);
+// 					console.log(files.childNodes[0].getAttribute("description"));
+					
+// 					console.log(titles[i].firstChild.nodeValue);
+// 					console.log(bodys[i].firstChild.nodeValue);
+
+					var title = sections[i].getElementsByTagName("stitle")[0].firstChild.nodeValue;
+					var artical = sections[i].getElementsByTagName("xbody")[0].firstChild.nodeValue;
+					var imgs = sections[i].getElementsByTagName("file")[0].childNodes[0].firstChild.nodeValue;
+					var imgdis = sections[i].getElementsByTagName("file")[0].childNodes[0].getAttribute("description")
+					
+					
+					var eleRow = document.createElement("div");
+					eleRow.className = "row";
+					
+					var eleCol = document.createElement("div");
+					eleCol.className = "col-md-4";
+					
+					var eleImg = document.createElement("img");
+					
+					eleImg.className = "img-thumbnail";
+					eleImg.setAttribute("src",imgs);
+					eleImg.setAttribute("title",imgdis);
+					
+					eleCol.appendChild(eleImg)
+					
+					
+					var eleCol2 = document.createElement("div");
+					eleCol2.className = "col-md-8";
+					
+					var eleH3 = document.createElement("h3");
+					var eleText = document.createTextNode(title)
+					eleH3.appendChild(eleText);
+					eleCol2.appendChild(eleH3);
+					
+					var eleP = document.createElement("p");
+					var eleArt = document.createTextNode(artical.substring(0,155)+"...");
+					eleP.appendChild(eleArt);
+					eleCol2.appendChild(eleP);
+					
+					eleRow.appendChild(eleCol);
+					eleRow.appendChild(eleCol2);
+					
+					temp.appendChild(eleRow);
+				}
+				
+			}else{
+				alert(xhr.status + ":" + xhr.statusText);
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	</script>
+</body>
+</html>

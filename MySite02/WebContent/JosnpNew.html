@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+		<input type="button" value="click" id="button1">
+		<input type="button" value="stop" id="button2">
+		<div id="div1"></div>
+	
+	<script>
+	var btn = document.getElementById("button1");
+	btn.addEventListener("click", load);
+	var xhr = null;
+
+	function load() {
+		xhr = new XMLHttpRequest();
+		if (xhr != null) {
+			xhr.addEventListener("readystatechange", function () {
+				console.log("readyState" + xhr.readyState);
+			});
+			
+			xhr.addEventListener("load" , function(){
+				if (xhr.status == 200) {
+					console.log("load");
+					document.getElementById("div1").innerHTML = "<h3>"
+						+ xhr.responseText + "</h3>";
+			} else {
+				alert(xhr.status + ":" + xhr.statusText);}	
+			});
+			
+			xhr.addEventListener("abort",function(){
+				console.log("abort");
+			});
+			
+			xhr.open("get", "AjaxTest.jsp", true);
+			xhr.send();
+		} else {
+			alert("您的瀏覽器不支援");
+		}
+	}
+
+	</script>
+</body>
+</html>
